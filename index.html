@@ -1,1 +1,55 @@
-Hello World!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Lucid | Raspberry Temperature PoC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css" />
+    <link rel="icon" type="image/png" href="https://lucid-kv.store/lucid.png" />
+    <style media="screen">
+        #ct-chart {
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+              Lucid PoC - Temperature Chart
+            </a>
+            <a href="https://github.com/lucid-kv/lucid" target="_blank" class="navbar-text text-white">
+              <i class="fab fa-github"></i>&nbsp;
+              Star Us On GitHub
+            </a>
+        </div>
+    </nav>
+    <div class="container pt-5">
+        <h2>Raspberry RealTime Temperature</h2>
+        <p class="mb-4">This chart give the Raspberry temperature each minute.</p>
+        <div id="ct-chart"></div>
+        <h3 class="mb-3">How to do that?</h3>
+        <script src="https://gist.github.com/clintnetwork/68e588c4de52172682f1db486f8996cd.js"></script>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script type="text/javascript">
+        var labelData = [];
+        var serieData = [];
+        var chart = new Chartist.Line('#ct-chart', { labels: [labelData], series: [serieData] },
+        {
+            fullWidth: true,
+            chartPadding: { left: 0, right: 0 }
+        });
+
+        var eventSource = new EventSource("https://lucid-kv.herokuapp.com/notifications");
+        eventSource.addEventListener("rasp_poc_temp", function(e) {
+            labelData.push(new Date().toLocaleTimeString());
+            serieData.push(e.data);
+            chart.update();
+        })
+    </script>
+</body>
+</html>
