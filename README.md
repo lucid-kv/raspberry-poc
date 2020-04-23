@@ -1,4 +1,4 @@
-# Raspberry Lucid Proof-of-Concept
+# Lucid Proof-of-Concept - Raspberry Real Time Temperature
 
 This Proof-of-Concept show how it's possible to store raspberry's temperature data into a lucid node and fetch it into a chart.
 
